@@ -81,7 +81,7 @@ db.posts 컬렉션에
 title: "First Post", by: "bit", likes: 10
 title: "Second Post", by: "hong", likes: 50
 title: "Third Post", by: "bit", likes: 30
-title: "Fourth Post", by: "hong", likes: 10
+title: "Fourth Post", by: "hone", likes: 10
 
 INSERT 연습
 */
@@ -111,7 +111,7 @@ db.posts.insert({
 });
 
 // 여러 문서를 insert
-db.posts.insertMany([
+db.posts.inserMany([
 	{ title: "Fifth Post",
 	by: "bit",
 	likes: 50 },
@@ -127,3 +127,71 @@ db.posts.insertMany([
 db.posts.findOne()
 db.posts.find()
 // .pretty() 메서드: BSON을 보기 좋게 출력
+
+// 검색 조건 연산자
+// 같다: { key: value }
+db.posts.find({ "by" : "bit" }) // by = bit
+
+// 크다: $gt { key: { $gt: value } }
+db.posts.find({ "likes": { $gt: 30 } }) // likes > 30
+// 크거나 같다: $gte
+// 작다: $lt
+// 작거나 같다: $lte
+// 같지 않다: $ne
+
+// 조건의 조합
+// and연산
+/*
+ {
+   $and: [
+     { 조건 객체 1 },
+     { 조건 객체 2 }
+   ]
+ }
+*/
+
+// by가 hong이고 likes <= 30
+db.posts.find({
+	$and: [
+	{ by: "hong" },
+	{ likes: { $lte: 30 } }
+	]
+})
+
+// or 연산
+/* 
+   {
+     $or: [ 
+        { 조건 객체 1 },
+        { 조건 객체 2 },
+     ]
+   }
+*/
+
+// by가 hong이거나 likes > 10
+db.posts.find({
+	$or: [
+	{ by: "hong" },
+	{ likes: { $gt: 10 } }
+	]
+})
+
+// Projection
+// find, findOne의 두 번째 인자 객체로 출력 필드를 명시
+// 출력을 제어할 수 있다.
+// 1: 출력함, 0: 출력하지 않음
+// 모든 문서들 중에서, _id 출력하지 않고
+// title, likes 정보 출력
+db.posts.find({}, { title: 1, likes:1, _id:0 })
+
+// 출력 제한
+// .limit: 받아올 갯수를 제한
+// .skip: 건너뛸 문서의 갯수 지정
+db.posts.find().limit(2).skip(2)
+
+// 데이터 정렬
+// .sort: 정렬 기준 객체
+//	1: 오름차순, -1: 내림차순
+
+// likes의 역순으로 정렬
+db.posts.find().sort({ likes: -1 })
