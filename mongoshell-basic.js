@@ -195,3 +195,4 @@ db.posts.find().limit(2).skip(2)
 
 // likes의 역순으로 정렬
 db.posts.find().sort({ likes: -1 })
+db.posts.find().sort({ likes: -1, title: 1}) // 정렬 기준 여러 개
