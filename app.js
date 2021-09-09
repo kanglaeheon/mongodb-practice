@@ -110,6 +110,8 @@ app.get("/render", (req, resp) => {
 //  Router 탑재(미들웨어)
 const WebRouter = require("./router/WebRouter")(app);
 app.use("/web", WebRouter);
+const APIRouter = require("./router/APIRouter")(app);
+app.use("/api", APIRouter);
 
 function startServer() {
     //  database 연결 정보
