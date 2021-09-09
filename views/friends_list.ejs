@@ -10,9 +10,17 @@
 
     <title>Friend List</title>
     <script>
+      function confirm_modify(oid) {
+        alert("수정할 id: " + oid);
+        let choice = confirm("수정하시겠습니까? (GET 방식)");
+        if (choice) {
+          document.location.href = "/web/friends/modify/" + oid;
+        }
+      }
+
       function confirm_update(oid) {
         alert("수정할 id: " + oid);
-        let choice = confirm("수정하시겠습니까?");
+        let choice = confirm("수정하시겠습니까? (POST 방식)");
         if (choice) {
           document.location.href = "/web/friends/update/" + oid;
         }
@@ -57,7 +65,8 @@
             <td><%= friend.species %></td>
             <td><%= friend.age %></td>
             <td>
-              <button onclick='confirm_update("<%= friend._id %>")' class="btn btn-primary btn-sm">수정</button>
+              <button onclick='confirm_modify("<%= friend._id %>")' class="btn btn-primary btn-sm">수정(GET)</button>
+              <button onclick='confirm_update("<%= friend._id %>")' class="btn btn-primary btn-sm">수정(POST)</button>
               <button onclick='confirm_delete("<%= friend._id %>")' class="btn btn-danger btn-sm">삭제</button>
             </td>
           </tr>

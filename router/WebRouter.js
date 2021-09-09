@@ -22,6 +22,39 @@ module.exports = (app) => {
         //     .send("<p>Web Router 응답</p>");
     });
 
+    //  친구 수정 폼(GET)
+    router.get("/friends/modify/:id", (req,resp) => {
+        const id = req.params.id;
+        const db = app.get("db");
+        db.collection("friends").findOne({_id : ObjectId(id)})
+        .then(result => {
+            resp.render("friend_modify_form", { friend: result });
+        })
+    })
+
+    //  친구 수정 액션(GET)
+    router.get("/friends/modifyAction", (req, resp) => {
+        console.log(req.body);
+
+        let db = app.get("db");
+
+
+        db.collection("friends")
+        .updateOne(
+            {_id: ObjectId(req.body.id)},
+            {$set: {
+                name: req.body.name,
+                species: req.body.species,
+                age: parseInt(req.body.age)
+                }
+            }
+        )
+        .then(result => {
+            resp.status(200)
+            .redirect("/web/friends");
+        })
+    })
+
     //  친구 수정 폼(POST)
     router.get("/friends/update/:id", (req,resp) => {
         const id = req.params.id;
@@ -37,7 +70,6 @@ module.exports = (app) => {
         console.log(req.body);
 
         let db = app.get("db");
-
 
         db.collection("friends")
         .updateOne(
