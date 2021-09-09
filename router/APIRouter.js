@@ -2,23 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { ObjectId } = require("mongodb");
 
-function APIRouterEach(app) {
-    router.get("/:id" + ".json/", (req, resp) => {
-        console.log("보여줄 ID: ", req.params.id);
-
-        let db = app.get("db");
-        db.collection('friends')
-        .findOne({_id: ObjectId(req.params.id)})
-        .then(result => {
-            resp.status(200)
-                .header({"Content-Type": "text/json;charset=UTF-8"})
-                .json(result);
-        })
-    })
-
-    
-}
-
 function APIRouter(app) {
     router.get("/friends.json", (req, resp) => {
         let db = app.get("db");
@@ -34,6 +17,22 @@ function APIRouter(app) {
 
     return router;
 }
+
+router.get("/friends/:id", (req, resp) => {
+    let id = req.params.address.split('.')[0]
+    let db = app.get('db');
+    db.collection('friends')
+      .findOne({ _id: ObjectId(id) })
+      .then(result => {
+        resp.status(200)
+          .header({ "Content-Type": "text/json;charset=utf-8" })
+          .json(result);
+      })
+      .catch(reason => {
+        console.error(reason)
+      })
+
+  })
 
 //  라우터 내보내기
 module.exports = APIRouter;
