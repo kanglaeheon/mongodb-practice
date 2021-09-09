@@ -102,6 +102,9 @@ app.get("/render", (req, resp) => {
 })
 //  etag 문제로 304처리 혹은 파일 다운됨, 상단 etag 관련 문서 필독
 
+//  Router 탑재(미들웨어)
+const WebRouter = require("./router/WebRouter")(app);
+app.use("/web", WebRouter);
 
 function startServer() {
     //  database 연결 정보
