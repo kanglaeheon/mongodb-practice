@@ -24,8 +24,13 @@ const logger = require("morgan");
 //  로거를 express에 추가: 미들웨어 추가
 app.use(logger("dev"));
 
-//MongoDB
+//  MongoDB
 const { MongoClient } = require("mongodb");
+
+//  body-parser 등록
+//  4.16 버전 이후에는 express 내부에 bodyParser가 포함
+//  POST 요청을 처리할 수 있게 된다.
+app.use(express.urlencoded({ extended: false }));
 
 //  정적 웹 제공
 //  미들웨어 express.static 미들웨어 함수
