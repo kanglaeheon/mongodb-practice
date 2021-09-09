@@ -22,8 +22,41 @@ module.exports = (app) => {
         //     .send("<p>Web Router 응답</p>");
     });
 
+    //  친구 수정 폼(POST)
+    router.get("/friends/update/:id", (req,resp) => {
+        const id = req.params.id;
+        const db = app.get("db");
+        db.collection("friends").findOne({_id : ObjectId(id)})
+        .then(result => {
+            resp.render("friend_update_form", { friend: result });
+        })
+    })
+
+    //  친구 수정 액션(POST)
+    router.post("/friends/updateAction/:id", (req, resp) => {
+        console.log(req.body);
+
+        let db = app.get("db");
+
+
+        db.collection("friends")
+        .updateOne(
+            {_id: ObjectId(req.body.id)},
+            {$set: {
+                name: req.body.name,
+                species: req.body.species,
+                age: parseInt(req.body.age)
+                }
+            }
+        )
+        .then(result => {
+            resp.status(200)
+            .redirect("/web/friends");
+        })
+    })
+
     //  새 친구 등록 폼
-    router.get("/friends/new", (req, resp) => {
+     router.get("/friends/new", (req, resp) => {
         resp.render("friend_insert_form");
     })
 
@@ -36,7 +69,6 @@ module.exports = (app) => {
 
         let db = app.get("db");
 
-        
         db.collection("friends").insertOne(document)
             .then(result => {
                 console.log(result);

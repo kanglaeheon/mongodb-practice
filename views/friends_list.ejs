@@ -10,6 +10,14 @@
 
     <title>Friend List</title>
     <script>
+      function confirm_update(oid) {
+        alert("수정할 id: " + oid);
+        let choice = confirm("수정하시겠습니까?");
+        if (choice) {
+          document.location.href = "/web/friends/update/" + oid;
+        }
+      }
+
       function confirm_delete(oid) {
         alert("삭제할 id: " + oid);
         let choice = confirm("삭제하시겠습니까?");
@@ -18,6 +26,8 @@
           document.location.href = "/web/friends/delete/" + oid;
         }
       }
+
+
     </script>
   </head>
   <body>
@@ -46,8 +56,10 @@
             <td><a href="/web/friends/show/<%= friend._id %>"><%= friend.name %></a></td>
             <td><%= friend.species %></td>
             <td><%= friend.age %></td>
-            <td><a href="#" class="btn btn-primary btn-sm">수정</a>
-              <button onclick='confirm_delete("<%= friend._id %>")' class="btn btn-danger btn-sm">삭제</button></td>
+            <td>
+              <button onclick='confirm_update("<%= friend._id %>")' class="btn btn-primary btn-sm">수정</button>
+              <button onclick='confirm_delete("<%= friend._id %>")' class="btn btn-danger btn-sm">삭제</button>
+            </td>
           </tr>
           <% }) %>
           <!-- /TODO-->
